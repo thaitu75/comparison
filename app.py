@@ -4,35 +4,31 @@ import streamlit as st
 import requests
 import json
 import pandas as pd
-import os
-from dotenv import load_dotenv
 
 # ==========================================
 # 🔒 Configuration: Load Environment Variables
 # ==========================================
 
-# Load environment variables from .env file
-load_dotenv()
-
-# 🐟 Cat Kiss Fish API Credentials
-CATKISSFISH_CLIENT_ID = os.getenv("CATKISSFISH_CLIENT_ID")
-CATKISSFISH_CLIENT_SECRET = os.getenv("CATKISSFISH_CLIENT_SECRET")
+# Load environment variables from Streamlit Secrets
+CATKISSFISH_CLIENT_ID = st.secrets["CATKISSFISH_CLIENT_ID"]
+CATKISSFISH_CLIENT_SECRET = st.secrets["CATKISSFISH_CLIENT_SECRET"]
 
 # 🛍️ Shopify Stores Configuration
 SHOPIFY_STORES = {
     'G': {
-        'url': os.getenv("SHOPIFY_STORE_1_URL"),
-        'access_token': os.getenv("SHOPIFY_STORE_1_ACCESS_TOKEN")
+        'url': st.secrets["SHOPIFY_STORE_1_URL"],
+        'access_token': st.secrets["SHOPIFY_STORE_1_ACCESS_TOKEN"]
     },
     'C': {
-        'url': os.getenv("SHOPIFY_STORE_2_URL"),
-        'access_token': os.getenv("SHOPIFY_STORE_2_ACCESS_TOKEN")
+        'url': st.secrets["SHOPIFY_STORE_2_URL"],
+        'access_token': st.secrets["SHOPIFY_STORE_2_ACCESS_TOKEN"]
     },
     'U': {
-        'url': os.getenv("SHOPIFY_STORE_3_URL"),
-        'access_token': os.getenv("SHOPIFY_STORE_3_ACCESS_TOKEN")
+        'url': st.secrets["SHOPIFY_STORE_3_URL"],
+        'access_token': st.secrets["SHOPIFY_STORE_3_ACCESS_TOKEN"]
     }
 }
+
 
 # ==========================================
 # 🌐 API Endpoints
