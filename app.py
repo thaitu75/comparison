@@ -2,14 +2,13 @@
 
 import streamlit as st
 import requests
-import json
 import pandas as pd
 
 # ==========================================
 # 🔒 Configuration: Load Environment Variables
 # ==========================================
 
-# Load environment variables from Streamlit Secrets
+# Access secrets directly from Streamlit Cloud
 CATKISSFISH_CLIENT_ID = st.secrets["CATKISSFISH_CLIENT_ID"]
 CATKISSFISH_CLIENT_SECRET = st.secrets["CATKISSFISH_CLIENT_SECRET"]
 
@@ -28,6 +27,7 @@ SHOPIFY_STORES = {
         'access_token': st.secrets["SHOPIFY_STORE_3_ACCESS_TOKEN"]
     }
 }
+
 
 
 # ==========================================
