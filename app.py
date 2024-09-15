@@ -2,33 +2,33 @@
 
 import streamlit as st
 import requests
+import json
 import pandas as pd
+import os
 
 # ==========================================
 # 🔒 Configuration: Load Environment Variables
 # ==========================================
 
-# Access secrets directly from Streamlit Cloud
-CATKISSFISH_CLIENT_ID = st.secrets["CATKISSFISH_CLIENT_ID"]
-CATKISSFISH_CLIENT_SECRET = st.secrets["CATKISSFISH_CLIENT_SECRET"]
+# 🐟 Cat Kiss Fish API Credentials
+CATKISSFISH_CLIENT_ID = os.getenv("CATKISSFISH_CLIENT_ID")
+CATKISSFISH_CLIENT_SECRET = os.getenv("CATKISSFISH_CLIENT_SECRET")
 
 # 🛍️ Shopify Stores Configuration
 SHOPIFY_STORES = {
     'G': {
-        'url': st.secrets["SHOPIFY_STORE_1_URL"],
-        'access_token': st.secrets["SHOPIFY_STORE_1_ACCESS_TOKEN"]
+        'url': os.getenv("SHOPIFY_STORE_1_URL"),
+        'access_token': os.getenv("SHOPIFY_STORE_1_ACCESS_TOKEN")
     },
     'C': {
-        'url': st.secrets["SHOPIFY_STORE_2_URL"],
-        'access_token': st.secrets["SHOPIFY_STORE_2_ACCESS_TOKEN"]
+        'url': os.getenv("SHOPIFY_STORE_2_URL"),
+        'access_token': os.getenv("SHOPIFY_STORE_2_ACCESS_TOKEN")
     },
     'U': {
-        'url': st.secrets["SHOPIFY_STORE_3_URL"],
-        'access_token': st.secrets["SHOPIFY_STORE_3_ACCESS_TOKEN"]
+        'url': os.getenv("SHOPIFY_STORE_3_URL"),
+        'access_token': os.getenv("SHOPIFY_STORE_3_ACCESS_TOKEN")
     }
 }
-
-
 
 # ==========================================
 # 🌐 API Endpoints
@@ -42,8 +42,13 @@ CATKISSFISH_ORDER_DETAIL_URL = "https://www.catkissfish.com:8443/open/api/order/
 # 🚀 Functions to Interact with APIs
 # ==========================================
 
+import sys
+import subprocess
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
 # 🐟 Function to get access token from Cat Kiss Fish
-@st.cache_data(ttl=7000)  # Cache the token for ~2 hours (7200 seconds)
 def get_catkissfish_access_token(client_id, client_secret):
     payload = {
         "grant_type": "client_credentials",
@@ -96,7 +101,6 @@ def get_catkissfish_order_details(order_id, access_token):
         return None
 
 # 🛍️ Function to get Shopify order details based on order name
-@st.cache_data(ttl=600)  # Cache orders for 10 minutes
 def get_shopify_order_details(order_number, store_prefix):
     store = SHOPIFY_STORES.get(store_prefix.upper())
     if not store:
@@ -143,7 +147,6 @@ def get_shopify_order_details(order_number, store_prefix):
         return []
 
 # 🛍️ Function to get Shopify variant image given a variant ID and store prefix
-@st.cache_data(ttl=3600)  # Cache variant images for 1 hour
 def get_shopify_variant_image(variant_id, store_prefix):
     store = SHOPIFY_STORES.get(store_prefix.upper())
     if not store:
@@ -188,7 +191,6 @@ def get_shopify_variant_image(variant_id, store_prefix):
         return None
 
 # 🛍️ Function to get Shopify product's default image given a product ID and store prefix
-@st.cache_data(ttl=3600)  # Cache default product images for 1 hour
 def get_shopify_default_product_image(product_id, store_prefix):
     store = SHOPIFY_STORES.get(store_prefix.upper())
     if not store:
@@ -463,18 +465,6 @@ if order_pairs:
                     st.write("**Product Variant Image:** No images available.")
             
             st.markdown("---")  # Separator between products
-        
-        # ==========================================
-        # 🐟 **Cat Kiss Fish Order Properties**
-        # ==========================================
-        
-        # Removed the entire Order Properties section as per request
-        
-        # ==========================================
-        # 🛍️ **Shopify Order Properties**
-        # ==========================================
-        
-        # Removed the entire Shopify Order Properties section as per request
         
         # ==========================================
         # 📋 **Additional Order Information**
