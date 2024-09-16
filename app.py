@@ -227,7 +227,7 @@ st.sidebar.header("📥 Enter Multiple Order Numbers")
 # 📥 Input Field in Sidebar for Multiple Orders
 order_input = st.sidebar.text_area(
     "🔍 Enter Order Numbers",
-    """2024091409472568849382	C95839"""
+    "2024091409472568849382	C95839"
 )
 
 # Parse the input into a list of (Cat Kiss Fish, Shopify) order pairs with store prefix
