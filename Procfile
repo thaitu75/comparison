@@ -1,1 +1,1 @@
-web: streamlit run order_comparison_app.py --server.port $PORT --server.address 0.0.0.0
+web: sh setup.sh && streamlit run order_comparison_app.py --server.port $PORT --server.headless true
