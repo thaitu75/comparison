@@ -414,8 +414,8 @@ if order_pairs:
             with col1:
                 st.markdown(f"##### 🐟 **Cat Kiss Fish - Product {idx + 1}** 🐟")
                 st.write(f"**Product Name:** {catkissfish_data['Product Names'][idx]}")
-                st.write(f"**Size Name:** {catkissfish_data['Size Names'][idx]}")
                 st.write(f"**Quantity:** {catkissfish_data['Quantities'][idx]}")
+                st.write(f"**Size Name:** {catkissfish_data['Size Names'][idx]}")
                 
                 # Display Effect Images in a Scrollable Square Box with height:700px; width:100%
                 if cat_effect_images[idx]:
@@ -434,7 +434,7 @@ if order_pairs:
             with col2:
                 st.markdown(f"##### 🛍️ **Shopify - Product {idx + 1}** 🛍️")
                 st.write(f"**Product Name:** {shopify_data['Product Names'][idx]}")
-                
+                 st.write(f"**Quantity:** {shopify_data['Quantities'][idx]}")
                 # Display Product Properties Above Size Name and Remove "Product Properties:" Text
                 line_item_properties = shopify_order["line_items"][idx].get("properties", []) if idx < num_products_shopify else []
                 if line_item_properties:
@@ -446,7 +446,7 @@ if order_pairs:
                     st.write("- **No Product Properties Available.**")
                 
                 st.write(f"**Size Name:** {shopify_data['Size Names'][idx]}")
-                st.write(f"**Quantity:** {shopify_data['Quantities'][idx]}")
+               
                 
                 # Display Shopify Variant Image(s)
                 variant_images = shopify_data['Variant Images'][idx]
