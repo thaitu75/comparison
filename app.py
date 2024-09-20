@@ -326,8 +326,8 @@ if order_pairs:
         catkissfish_data = {
             "Order ID": catkissfish_order.get("id", "N/A"),
             "Product Names": cat_product_names if cat_product_names else ["N/A"],
-            "Quantities": cat_quantities if cat_quantities else ["N/A"],
             "Size Names": cat_size_names if cat_size_names else ["N/A"],
+            "Quantities": cat_quantities if cat_quantities else ["N/A"],
             "Customer Name": catkissfish_order.get("address", {}).get("userName", "N/A"),
             "Detail Address": catkissfish_order.get("address", {}).get("detailAddress", "N/A"),
             "Postal Code": catkissfish_order.get("address", {}).get("postalCode", "N/A"),
@@ -340,8 +340,8 @@ if order_pairs:
         shopify_data = {
             "Order Number": shopify_order.get("order_number", "N/A"),
             "Product Names": [item.get("name", "N/A") for item in shopify_order.get("line_items", [])],
-            "Quantities": [str(item.get("quantity", "N/A")) for item in shopify_order.get("line_items", [])],
             "Size Names": [item.get("variant_title", "N/A") for item in shopify_order.get("line_items", [])],
+            "Quantities": [str(item.get("quantity", "N/A")) for item in shopify_order.get("line_items", [])],
             "Customer Name": f"{shopify_order.get('customer', {}).get('first_name', '')} {shopify_order.get('customer', {}).get('last_name', '')}".strip(),
             "Detail Address": shopify_order.get("shipping_address", {}).get("address1", "N/A"),
             "Postal Code": shopify_order.get("shipping_address", {}).get("zip", "N/A"),
@@ -414,8 +414,8 @@ if order_pairs:
             with col1:
                 st.markdown(f"##### 🐟 **Cat Kiss Fish - Product {idx + 1}** 🐟")
                 st.write(f"**Product Name:** {catkissfish_data['Product Names'][idx]}")
-                st.write(f"**Quantity:** {catkissfish_data['Quantities'][idx]}")
                 st.write(f"**Size Name:** {catkissfish_data['Size Names'][idx]}")
+                st.write(f"**Quantity:** {catkissfish_data['Quantities'][idx]}")
                 
                 # Display Effect Images in a Scrollable Square Box with height:700px; width:100%
                 if cat_effect_images[idx]:
@@ -434,7 +434,7 @@ if order_pairs:
             with col2:
                 st.markdown(f"##### 🛍️ **Shopify - Product {idx + 1}** 🛍️")
                 st.write(f"**Product Name:** {shopify_data['Product Names'][idx]}")
-                 st.write(f"**Quantity:** {shopify_data['Quantities'][idx]}")
+                
                 # Display Product Properties Above Size Name and Remove "Product Properties:" Text
                 line_item_properties = shopify_order["line_items"][idx].get("properties", []) if idx < num_products_shopify else []
                 if line_item_properties:
@@ -446,7 +446,7 @@ if order_pairs:
                     st.write("- **No Product Properties Available.**")
                 
                 st.write(f"**Size Name:** {shopify_data['Size Names'][idx]}")
-               
+                st.write(f"**Quantity:** {shopify_data['Quantities'][idx]}")
                 
                 # Display Shopify Variant Image(s)
                 variant_images = shopify_data['Variant Images'][idx]
