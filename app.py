@@ -326,8 +326,8 @@ if order_pairs:
         catkissfish_data = {
             "Order ID": catkissfish_order.get("id", "N/A"),
             "Product Names": cat_product_names if cat_product_names else ["N/A"],
-            "Size Names": cat_size_names if cat_size_names else ["N/A"],
             "Quantities": cat_quantities if cat_quantities else ["N/A"],
+            "Size Names": cat_size_names if cat_size_names else ["N/A"],
             "Customer Name": catkissfish_order.get("address", {}).get("userName", "N/A"),
             "Detail Address": catkissfish_order.get("address", {}).get("detailAddress", "N/A"),
             "Postal Code": catkissfish_order.get("address", {}).get("postalCode", "N/A"),
@@ -340,8 +340,8 @@ if order_pairs:
         shopify_data = {
             "Order Number": shopify_order.get("order_number", "N/A"),
             "Product Names": [item.get("name", "N/A") for item in shopify_order.get("line_items", [])],
-            "Size Names": [item.get("variant_title", "N/A") for item in shopify_order.get("line_items", [])],
             "Quantities": [str(item.get("quantity", "N/A")) for item in shopify_order.get("line_items", [])],
+            "Size Names": [item.get("variant_title", "N/A") for item in shopify_order.get("line_items", [])],
             "Customer Name": f"{shopify_order.get('customer', {}).get('first_name', '')} {shopify_order.get('customer', {}).get('last_name', '')}".strip(),
             "Detail Address": shopify_order.get("shipping_address", {}).get("address1", "N/A"),
             "Postal Code": shopify_order.get("shipping_address", {}).get("zip", "N/A"),
