@@ -5,10 +5,14 @@ import requests
 import json
 import pandas as pd
 import os
+from dotenv import load_dotenv
 
 # ==========================================
 # 🔒 Configuration: Load Environment Variables
 # ==========================================
+
+# Load environment variables from .env file
+load_dotenv()
 
 # 🐟 Cat Kiss Fish API Credentials
 CATKISSFISH_CLIENT_ID = os.getenv("CATKISSFISH_CLIENT_ID")
@@ -42,13 +46,8 @@ CATKISSFISH_ORDER_DETAIL_URL = "https://www.catkissfish.com:8443/open/api/order/
 # 🚀 Functions to Interact with APIs
 # ==========================================
 
-import sys
-import subprocess
-
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
 # 🐟 Function to get access token from Cat Kiss Fish
+@st.cache_data(ttl=7000)  # Cache the token for ~2 hours (7200 seconds)
 def get_catkissfish_access_token(client_id, client_secret):
     payload = {
         "grant_type": "client_credentials",
@@ -101,6 +100,7 @@ def get_catkissfish_order_details(order_id, access_token):
         return None
 
 # 🛍️ Function to get Shopify order details based on order name
+@st.cache_data(ttl=600)  # Cache orders for 10 minutes
 def get_shopify_order_details(order_number, store_prefix):
     store = SHOPIFY_STORES.get(store_prefix.upper())
     if not store:
@@ -147,6 +147,7 @@ def get_shopify_order_details(order_number, store_prefix):
         return []
 
 # 🛍️ Function to get Shopify variant image given a variant ID and store prefix
+@st.cache_data(ttl=3600)  # Cache variant images for 1 hour
 def get_shopify_variant_image(variant_id, store_prefix):
     store = SHOPIFY_STORES.get(store_prefix.upper())
     if not store:
@@ -191,6 +192,7 @@ def get_shopify_variant_image(variant_id, store_prefix):
         return None
 
 # 🛍️ Function to get Shopify product's default image given a product ID and store prefix
+@st.cache_data(ttl=3600)  # Cache default product images for 1 hour
 def get_shopify_default_product_image(product_id, store_prefix):
     store = SHOPIFY_STORES.get(store_prefix.upper())
     if not store:
@@ -232,7 +234,9 @@ st.sidebar.header("📥 Enter Multiple Order Numbers")
 # 📥 Input Field in Sidebar for Multiple Orders
 order_input = st.sidebar.text_area(
     "🔍 Enter Order Numbers",
-    
+    """2024091112121444123628 G61226
+2024091110490123363860 C61227
+2024091110540123144343 U61228"""
 )
 
 # Parse the input into a list of (Cat Kiss Fish, Shopify) order pairs with store prefix
@@ -331,8 +335,8 @@ if order_pairs:
         catkissfish_data = {
             "Order ID": catkissfish_order.get("id", "N/A"),
             "Product Names": cat_product_names if cat_product_names else ["N/A"],
-            "Quantities": cat_quantities if cat_quantities else ["N/A"],
             "Size Names": cat_size_names if cat_size_names else ["N/A"],
+            "Quantities": cat_quantities if cat_quantities else ["N/A"],
             "Customer Name": catkissfish_order.get("address", {}).get("userName", "N/A"),
             "Detail Address": catkissfish_order.get("address", {}).get("detailAddress", "N/A"),
             "Postal Code": catkissfish_order.get("address", {}).get("postalCode", "N/A"),
@@ -345,8 +349,8 @@ if order_pairs:
         shopify_data = {
             "Order Number": shopify_order.get("order_number", "N/A"),
             "Product Names": [item.get("name", "N/A") for item in shopify_order.get("line_items", [])],
-            "Quantities": [str(item.get("quantity", "N/A")) for item in shopify_order.get("line_items", [])],
             "Size Names": [item.get("variant_title", "N/A") for item in shopify_order.get("line_items", [])],
+            "Quantities": [str(item.get("quantity", "N/A")) for item in shopify_order.get("line_items", [])],
             "Customer Name": f"{shopify_order.get('customer', {}).get('first_name', '')} {shopify_order.get('customer', {}).get('last_name', '')}".strip(),
             "Detail Address": shopify_order.get("shipping_address", {}).get("address1", "N/A"),
             "Postal Code": shopify_order.get("shipping_address", {}).get("zip", "N/A"),
@@ -418,9 +422,9 @@ if order_pairs:
             
             with col1:
                 st.markdown(f"##### 🐟 **Cat Kiss Fish - Product {idx + 1}** 🐟")
-               st.write(f"**Quantity:** {catkissfish_data['Quantities'][idx]}")
                 st.write(f"**Product Name:** {catkissfish_data['Product Names'][idx]}")
                 st.write(f"**Size Name:** {catkissfish_data['Size Names'][idx]}")
+                st.write(f"**Quantity:** {catkissfish_data['Quantities'][idx]}")
                 
                 # Display Effect Images in a Scrollable Square Box with height:700px; width:100%
                 if cat_effect_images[idx]:
@@ -439,7 +443,7 @@ if order_pairs:
             with col2:
                 st.markdown(f"##### 🛍️ **Shopify - Product {idx + 1}** 🛍️")
                 st.write(f"**Product Name:** {shopify_data['Product Names'][idx]}")
-              st.write(f"**Quantity:** {shopify_data['Quantities'][idx]}")
+                
                 # Display Product Properties Above Size Name and Remove "Product Properties:" Text
                 line_item_properties = shopify_order["line_items"][idx].get("properties", []) if idx < num_products_shopify else []
                 if line_item_properties:
@@ -451,7 +455,7 @@ if order_pairs:
                     st.write("- **No Product Properties Available.**")
                 
                 st.write(f"**Size Name:** {shopify_data['Size Names'][idx]}")
-             
+                st.write(f"**Quantity:** {shopify_data['Quantities'][idx]}")
                 
                 # Display Shopify Variant Image(s)
                 variant_images = shopify_data['Variant Images'][idx]
@@ -463,6 +467,18 @@ if order_pairs:
                     st.write("**Product Variant Image:** No images available.")
             
             st.markdown("---")  # Separator between products
+        
+        # ==========================================
+        # 🐟 **Cat Kiss Fish Order Properties**
+        # ==========================================
+        
+        # Removed the entire Order Properties section as per request
+        
+        # ==========================================
+        # 🛍️ **Shopify Order Properties**
+        # ==========================================
+        
+        # Removed the entire Shopify Order Properties section as per request
         
         # ==========================================
         # 📋 **Additional Order Information**
